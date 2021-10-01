@@ -4,21 +4,28 @@ import IpAddressDetails from './components/IpAdressDetails';
 
 function App() {
   const [ipAddress,setIpAddress] = useState('62.8.84.56');
+  const [ipDetails,setIpDetails] = useState({})
 
   useEffect(()=>{
-    fetchLocation()
-
+    const fetchIpDetails = async () =>{
+      const getIpDetails = await fetchLocation()
+      setIpDetails(getIpDetails)
+    }
+    fetchIpDetails()
+   
   },[]);
+  
 
   const fetchLocation = async () =>{
-    const res = await fetch(`https://geo.ipify.org/api/v1?apiKey=at_a3vrHihi2K5Zu4JoizStcqrDQFxJJ&ipAddress=${ipAddress}`);
+    const res = await fetch(`https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_MY_API_KEY}=${ipAddress}`);
     const data = await res.json();
-    console.log(data)
+   
+    return data
   }
 
   return (
     <div className="App">
-      <IpAddressDetails ipAddress={ipAddress} />
+      <IpAddressDetails ipDetails={ipDetails} />
     </div>
   );
 }
